@@ -20,8 +20,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // App queries go through Supabase's transaction-mode pooler (fast,
+  // handles many short-lived connections — what Prisma Client uses at
+  // runtime).
+  url       = env("DATABASE_URL")
+  // Migrations need a real, non-pooled (or session-mode) connection —
+  // the transaction pooler doesn't support the prepared statements
+  // `prisma migrate` needs. Supabase gives you this as a second URL.
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {

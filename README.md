@@ -31,7 +31,8 @@ immutable audit trail.
    ```bash
    npm install
    cp .env.example .env
-   # edit .env: set DATABASE_URL, and set AUTH_SECRET to the output of:
+   # edit .env: set DATABASE_URL (and DIRECT_URL if you're on Supabase —
+   # see the comments in .env.example), and set AUTH_SECRET to the output of:
    openssl rand -base64 32
    ```
 
