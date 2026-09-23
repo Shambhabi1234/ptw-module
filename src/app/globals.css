@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --charcoal: #1c2023;
+  --charcoal-soft: #262b2f;
+  --steel-50: #f2f4f2;
+  --steel-100: #e7eae7;
+  --steel-300: #c3cac4;
+  --steel-500: #758079;
+  --steel-700: #43504a;
+  --line: #d4d9d3;
+
+  --amber: #c98a1b;
+  --amber-bg: #fbf1de;
+  --green: #3b7a57;
+  --green-bg: #e7f1ea;
+  --red: #a33a2c;
+  --red-bg: #f7e9e6;
+  --orange: #c1602d;
+  --orange-bg: #faece2;
+  --blue: #3d6b8c;
+  --blue-bg: #e7eef2;
+  --grey: #5b6469;
+  --grey-bg: #eceeec;
+
+  --type-hot-work: #c1432d;
+  --type-confined-space: #3d6b8c;
+  --type-working-at-height: #8c6a3d;
+  --type-electrical: #a3831b;
+}
+
+@theme inline {
+  --color-charcoal: var(--charcoal);
+  --color-charcoal-soft: var(--charcoal-soft);
+  --color-steel-50: var(--steel-50);
+  --color-steel-100: var(--steel-100);
+  --color-steel-300: var(--steel-300);
+  --color-steel-500: var(--steel-500);
+  --color-steel-700: var(--steel-700);
+  --color-line: var(--line);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  background: var(--steel-50);
+  color: var(--charcoal);
+  font-family: var(--font-sans);
+  min-height: 100%;
+}
+
+* {
+  border-color: var(--line);
+}
+
+::selection {
+  background: var(--amber-bg);
+}
+
+.permit-code {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
