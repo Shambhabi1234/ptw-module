@@ -24,13 +24,13 @@ export const hotWorkFieldsSchema = z.object({
   fireWatchAssigned: z.string().min(1, "Fire watch name is required"),
   fireExtinguisherType: z.string().min(1),
   combustiblesClearedRadiusM: z.number().positive(),
-  gasTest: gasTest,
+    gasTest: gasTest.optional(),
 });
 
 export const confinedSpaceFieldsSchema = z.object({
   spaceId: z.string().min(1),
   entryPoint: z.string().min(1),
-  atmosphericTest: gasTest,
+    atmosphericTest: gasTest.optional(),
   standbyAttendant: z.string().min(1, "Standby attendant is required"),
   rescuePlan: z.string().min(1),
   ventilationMethod: z.string().min(1),

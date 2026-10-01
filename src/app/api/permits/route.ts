@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canCreatePermit } from "@/lib/permissions";
 import { validateTypeFields, getPermitTypeDef } from "@/lib/permitTypes";
-import { generatePermitCode } from "@/lib/audit";
+import { generatePermitCode, writeAudit } from "@/lib/audit";
 import { sweepExpiredPermits } from "@/lib/expiry";
 import { findConflicts } from "@/lib/conflicts";
 
@@ -126,24 +126,33 @@ export async function POST(req: NextRequest) {
 
   const code = await generatePermitCode(data.type);
 
-  const permit = await prisma.permit.create({
-    data: {
-      code,
-      type: data.type,
-      status: "DRAFT",
-      requesterId: user.id,
-      contractorName: data.contractorName,
-      workDescription: data.workDescription,
-      plantId: data.plantId,
-      areaId: data.areaId,
-      equipmentId: data.equipmentId || null,
-      plannedStart: new Date(data.plannedStart),
-      plannedEnd: new Date(data.plannedEnd),
-      hazards: data.hazards,
-      ppeRequired: data.ppeRequired,
-      precautions,
-      typeFields: typeCheck.data,
-    },
+  const permit = await prisma.$transaction(async (tx) => {
+    const created = await tx.permit.create({
+      data: {
+        code,
+        type: data.type,
+        status: "DRAFT",
+        requesterId: user.id,
+        contractorName: data.contractorName,
+        workDescription: data.workDescription,
+        plantId: data.plantId,
+        areaId: data.areaId,
+        equipmentId: data.equipmentId || null,
+        plannedStart: new Date(data.plannedStart),
+        plannedEnd: new Date(data.plannedEnd),
+        hazards: data.hazards,
+        ppeRequired: data.ppeRequired,
+        precautions,
+        typeFields: typeCheck.data,
+      },
+    });
+    await writeAudit(tx, {
+      permitId: created.id,
+      actorId: user.id,
+      action: "CREATED",
+      comment: "Draft created.",
+    });
+    return created;
   });
 
   const conflicts = await findConflicts({

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useCurrentUser } from "@/lib/client/useCurrentUser";
@@ -10,17 +11,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  if (loading) {
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login");
+    }
+  }, [loading, user, router]);
+
+  if (loading || !user) {
     return (
       <div className="flex-1 flex items-center justify-center text-steel-500 text-sm">
         Loading…
       </div>
     );
-  }
-
-  if (!user) {
-    if (typeof window !== "undefined") router.replace("/login");
-    return null;
   }
 
   async function logout() {

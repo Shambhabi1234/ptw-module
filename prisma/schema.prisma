@@ -97,6 +97,7 @@ model Plant {
   name      String
   location  String
   areas     Area[]
+  permits   Permit[]     
   createdAt DateTime @default(now())
 }
 
